@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using WhatsNewInCSharp6.Features.Exceptions;
 using WhatsNewInCSharp6.Features.Methods;
+using WhatsNewInCSharp6.Features.Miscellaneous;
 using WhatsNewInCSharp6.Features.Properties;
 using WhatsNewInCSharp6.Features.Syntax;
 
@@ -13,14 +14,11 @@ namespace WhatsNewInCSharp6
 		static void Main(string[] args)
 		{
 			//Program.DemonstrateProperties();
-			//Console.Out.WriteLine();
 			//Program.DemonstrateMethods();
-			//Console.Out.WriteLine();
 			//Program.DemonstrateNullConditionalAndStringInterpolation();
-			//Console.Out.WriteLine();
 			//Program.DemonstrateNameOf();
-			//Console.Out.WriteLine();
-			Program.DemonstrateExceptions().Wait();
+			//Program.DemonstrateExceptions().Wait();
+			Program.DemonstrateMiscellaneous();
 		}
 
 		private static void DemonstrateProperties()
@@ -78,7 +76,8 @@ namespace WhatsNewInCSharp6
 				Console.Out.WriteLine("NullReferenceException occurred on safeParent.");
 			}
 
-			Console.Out.WriteLine("safeParent version with null conditional operator: " + safeParent.Child?.ToString() ?? "Null reference found.");
+			Console.Out.WriteLine("safeParent version with null conditional operator: " + 
+				(safeParent.Child?.ToString() ?? "Null reference found."));
 		}
 
 		private static void DemonstrateNameOf()
@@ -97,9 +96,13 @@ namespace WhatsNewInCSharp6
 			Console.Out.WriteLine(nameof(INameOf.Data));
 
 			// This doesn't work:
-			// Console.Out.WriteLine(nameof(INameOfGeneric<>.Method<>));
+			// Console.Out.WriteLine(nameof(INameOfWithGeneric<>.Method<>));
+			// Or this:
+			// Console.Out.WriteLine(nameof(INameOfWithGeneric<>.Method));
 			// Even if I redfined the calling method to "DemonstrateNameOf<T, U>", this wouldn't work either:
 			// Console.Out.WriteLine(nameof(INameOfGeneric<T>.Method<U>));
+			// But this does:
+			Console.Out.WriteLine(nameof(INameOfWithGeneric<int>.Method));
 
 			var nameOf = new NameOfWithGeneric<string>();
 			Console.Out.WriteLine(nameof(nameOf.Method));
@@ -122,6 +125,15 @@ namespace WhatsNewInCSharp6
 				await Console.Out.WriteLineAsync($"Caught in {nameof(Program.DemonstrateExceptions)}");
 			}
       }
+
+		private static void DemonstrateMiscellaneous()
+		{
+			var oldThings = new UsingOldThings();
+			Console.Out.WriteLine(oldThings);
+
+			var newThings = new UsingNewThings();
+			Console.Out.WriteLine(newThings);
+		}
 	}
 
 	public interface INameOf

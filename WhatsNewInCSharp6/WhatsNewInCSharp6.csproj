@@ -54,6 +54,9 @@
     <Compile Include="Features\Methods\NewMethods.cs" />
     <Compile Include="Features\Methods\Helpers\OldMethodHelpers.cs" />
     <Compile Include="Features\Methods\OldMethods.cs" />
+    <Compile Include="Features\Miscellaneous\Things.cs" />
+    <Compile Include="Features\Miscellaneous\UsingNewThings.cs" />
+    <Compile Include="Features\Miscellaneous\UsingOldThings.cs" />
     <Compile Include="Features\Properties\NewPropertiesOnConstruction.cs" />
     <Compile Include="Features\Properties\NewProperties.cs" />
     <Compile Include="Features\Properties\OldProperties.cs" />
