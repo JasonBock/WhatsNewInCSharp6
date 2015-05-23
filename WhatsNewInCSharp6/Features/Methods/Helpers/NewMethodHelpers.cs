@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using static System.Math;
 // Uncommenting this line of code will cause an ambiguous call error.
-// using static WhatsNewInCSharp6.Features.Methods.Helpers.MinMethod;
+//using static WhatsNewInCSharp6.Features.Methods.Helpers.MinMethod;
 
 namespace WhatsNewInCSharp6.Features.Methods.Helpers
 {

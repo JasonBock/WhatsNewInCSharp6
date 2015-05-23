@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spackle.Extensions;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using WhatsNewInCSharp6.Features.Exceptions;
@@ -18,17 +19,21 @@ namespace WhatsNewInCSharp6
 			//Program.DemonstrateNullConditionalAndStringInterpolation();
 			//Program.DemonstrateNameOf();
 			//Program.DemonstrateExceptions().Wait();
+			//Program.DemonstrateCallStacksInCatchBlocks();
 			Program.DemonstrateMiscellaneous();
 		}
 
 		private static void DemonstrateProperties()
 		{
 			var oldWay = new OldProperties();
-			Console.Out.WriteLine("ReadWriteData: " + oldWay.ReadWriteData + ", ReadOnlyData: " + oldWay.ReadOnlyData);
+			Console.Out.WriteLine("ReadWriteData: " + oldWay.ReadWriteData + 
+				", ReadOnlyData: " + oldWay.ReadOnlyData);
 			var newWay = new NewProperties();
-			Console.Out.WriteLine("ReadWriteData: " + newWay.ReadWriteData + ", ReadOnlyData: " + newWay.ReadOnlyData);
+			Console.Out.WriteLine("ReadWriteData: " + newWay.ReadWriteData + 
+				", ReadOnlyData: " + newWay.ReadOnlyData);
 			var newWayOnCtor = new NewPropertiesOnConstruction();
-			Console.Out.WriteLine("ReadWriteData: " + newWayOnCtor.ReadWriteData + ", ReadOnlyData: " + newWayOnCtor.ReadOnlyData);
+			Console.Out.WriteLine("ReadWriteData: " + newWayOnCtor.ReadWriteData + 
+				", ReadOnlyData: " + newWayOnCtor.ReadOnlyData);
 		}
 
 		private static void DemonstrateMethods()
@@ -58,10 +63,12 @@ namespace WhatsNewInCSharp6
 
 		private static void DemonstrateNullConditionalAndStringInterpolation()
 		{
-			var oldParent = new Parent(new OldChild("John", "Smith", new DateTime(1980, 2, 2)));
+			var oldParent = new Parent(new OldChild(
+				"John", "Smith", new DateTime(1980, 2, 2)));
 			Console.Out.WriteLine("oldParent version: " + oldParent.Child);
 
-			var newParent = new Parent(new NewChild("Jane", "Smith", new DateTime(1990, 3, 3)));
+			var newParent = new Parent(new NewChild(
+				"Jane", "Smith", new DateTime(1990, 3, 3)));
 			Console.Out.WriteLine("newParent version: " + newParent.Child);
 
 			var safeParent = new Parent(null);
@@ -76,17 +83,20 @@ namespace WhatsNewInCSharp6
 				Console.Out.WriteLine("NullReferenceException occurred on safeParent.");
 			}
 
-			Console.Out.WriteLine("safeParent version with null conditional operator: " + 
+         Console.Out.WriteLine("safeParent version with null conditional operator: " + 
 				(safeParent.Child?.ToString() ?? "Null reference found."));
 		}
 
 		private static void DemonstrateNameOf()
 		{
-			var parent = new Parent(new NewChild("Jane", "Smith", new DateTime(1990, 3, 3)));
+			var parent = new Parent(new NewChild(
+				"Jane", "Smith", new DateTime(1990, 3, 3)));
 
-			WeakEventManager<Child, EventArgs>.AddHandler(parent.Child, "ToStringCalled",
+			WeakEventManager<Child, EventArgs>.AddHandler(
+				parent.Child, "ToStringCalled",
 				(s, e) => Console.Out.WriteLine("Magic string implementation: ToString was called"));
-			WeakEventManager<Child, EventArgs>.AddHandler(parent.Child, nameof(Child.ToStringCalled),
+			WeakEventManager<Child, EventArgs>.AddHandler(
+				parent.Child, nameof(Child.ToStringCalled),
 				(s, e) => Console.Out.WriteLine("nameof implementation: ToString was called"));
 			Console.Out.WriteLine(parent.Child);
 
@@ -113,8 +123,10 @@ namespace WhatsNewInCSharp6
 		private static async Task DemonstrateExceptions()
 		{
 			var horrible = new Horrible(new Logger());
-			Console.Out.WriteLine($"Remainder of 10/6 is {await horrible.RemainderAsync(10, 6, false)}");
-			Console.Out.WriteLine($"Remainder of 10/0 is {await horrible.RemainderAsync(10, 0, true)}");
+			Console.Out.WriteLine(
+				$"Remainder of 10/6 is {await horrible.RemainderAsync(10, 6, false)}");
+			Console.Out.WriteLine(
+				$"Remainder of 10/0 is {await horrible.RemainderAsync(10, 0, true)}");
 
 			try
 			{
@@ -122,9 +134,63 @@ namespace WhatsNewInCSharp6
 			}
 			catch (DivideByZeroException)
 			{
-				await Console.Out.WriteLineAsync($"Caught in {nameof(Program.DemonstrateExceptions)}");
+				await Console.Out.WriteLineAsync(
+					$"Caught in {nameof(Program.DemonstrateExceptions)}");
 			}
       }
+
+		private static void DemonstrateCallStacksInCatchBlocks()
+		{
+			Console.Out.WriteLine("ExceptionsAndFiltering.OuterMethod(false)");
+
+			try
+			{
+				ExceptionsAndFiltering.OuterMethod(false);
+			}
+			catch(DivideByZeroException e)
+			{
+				e.Print(Console.Out);
+			}
+
+			Console.Out.WriteLine();
+
+			Console.Out.WriteLine("ExceptionsAndFiltering.OuterMethodWithFilter(false)");
+
+			try
+			{
+				ExceptionsAndFiltering.OuterMethodWithFilter(false);
+			}
+			catch (DivideByZeroException e)
+			{
+				e.Print(Console.Out);
+			}
+
+			Console.Out.WriteLine();
+			Console.Out.WriteLine();
+			Console.Out.WriteLine("ExceptionsAndFiltering.OuterMethod(true)");
+
+			try
+			{
+				ExceptionsAndFiltering.OuterMethod(true);
+			}
+			catch (DivideByZeroException e)
+			{
+				e.Print(Console.Out);
+			}
+
+			Console.Out.WriteLine();
+
+			Console.Out.WriteLine("ExceptionsAndFiltering.OuterMethodWithFilter(true)");
+
+			try
+			{
+				ExceptionsAndFiltering.OuterMethodWithFilter(true);
+			}
+			catch (DivideByZeroException e)
+			{
+				e.Print(Console.Out);
+			}
+		}
 
 		private static void DemonstrateMiscellaneous()
 		{
@@ -133,6 +199,52 @@ namespace WhatsNewInCSharp6
 
 			var newThings = new UsingNewThings();
 			Console.Out.WriteLine(newThings);
+		}
+	}
+
+	internal static class ExceptionsAndFiltering
+	{
+		internal static void OuterMethod(bool handle)
+		{
+			ExceptionsAndFiltering.InnerMethod(0, handle);
+		}
+
+		private static int InnerMethod(int x, bool handle)
+		{
+			try
+			{
+				return 2 / x;
+			}
+			catch (DivideByZeroException)
+			{
+				if(!handle)
+				{
+					throw;
+				}
+
+				Console.Out.WriteLine($"{nameof(ExceptionsAndFiltering)}.{nameof(ExceptionsAndFiltering.InnerMethod)}");
+			}
+
+			return 0;
+		}
+
+		internal static void OuterMethodWithFilter(bool handle)
+		{
+			ExceptionsAndFiltering.InnerMethodWithFilter(0, handle);
+		}
+
+		private static int InnerMethodWithFilter(int x, bool handle)
+		{
+			try
+			{
+				return 2 / x;
+			}
+			catch (DivideByZeroException) when (handle)
+			{
+				Console.Out.WriteLine($"{nameof(ExceptionsAndFiltering)}.{nameof(ExceptionsAndFiltering.InnerMethodWithFilter)}");
+         }
+
+			return 0;
 		}
 	}
 
