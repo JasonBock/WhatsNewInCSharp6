@@ -6,10 +6,18 @@ namespace WhatsNewInCSharp6.Features.Miscellaneous
 	{
 		private Dictionary<int, string> things = new Dictionary<int, string>();
 
+		public Things() : base() { }
+
 		public string this[int i]
 		{
-			get { return this.things[i]; }
-			set { this.things[i] = value; }
+			get
+			{
+				return this.things[i];
+			}
+			set
+			{
+				this.things[i] = value;
+			}
 		}
 	}
 }

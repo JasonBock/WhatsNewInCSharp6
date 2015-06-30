@@ -21,6 +21,6 @@ namespace WhatsNewInCSharp6.Features.Methods
 
 		// Uncommenting this line of code will have the "GetMinimum" call in CalculateMinimum()
 		// to resolve to this method. 
-		// private static int GetMinimum(int x, int y) => 44;
+		//private static int GetMinimum(int x, int y) => 44;
 	}
 }

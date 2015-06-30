@@ -25,7 +25,7 @@ namespace WhatsNewInCSharp6.Features.Exceptions
 				await this.logger.LogAsync("Divide by zero.");
 			}
 
-         return result;
+			return result;
 		}
 
 		private static bool Ouch()

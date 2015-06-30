@@ -11,7 +11,8 @@ namespace WhatsNewInCSharp6.Extensions
 		}
 
 		// Note: This doesn't work.
-		internal static string UsingEx(this FormattableString @this, CultureInfo culture)
+		internal static string UsingEx(
+			this FormattableString @this, CultureInfo culture)
 		{
 			return @this.ToString(culture);
 		}

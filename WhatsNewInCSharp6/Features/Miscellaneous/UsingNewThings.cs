@@ -6,6 +6,9 @@
 
 		public UsingNewThings()
 		{
+			// Now methods that return values can just be passed in directly:
+			//this.things = new Things((Action<string>)this.ActionCallback);
+			//this.things = new Things(this.FuncCallback);
 			this.things = new Things
 			{
 				[0] = "Tesla",

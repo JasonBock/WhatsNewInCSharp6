@@ -6,11 +6,23 @@
 
 		public UsingOldThings()
 		{
+			// I can do this:
+			//this.things = new Things(_ => { Console.Out.WriteLine(_); });
+			//this.things = new Things(_ => { Console.Out.WriteLine(_); return string.Empty; });
+
+			// But in C#5, I can't do this - I get an ambiguous call error:
+			//this.things = new Things(this.ActionCallback);
+			//this.things = new Things(this.FuncCallback);
+
+			// The only way to fix it in C#5 is to add casts:
+			//this.things = new Things((Action<string>)this.ActionCallback);
+			//this.things = new Things((Func<string, string>)this.FuncCallback);
+
 			this.things = new Things();
 			this.things[0] = "Model T";
 			this.things[1] = "Book";
 			this.things[2] = "Album";
-		}
+      }
 
 		public override string ToString()
 		{
